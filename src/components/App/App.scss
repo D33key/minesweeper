@@ -1,0 +1,42 @@
+@import "../../styles/index.scss";
+
+.app {
+    background: #c2c2c2;
+    padding: 16px;
+
+    @include borders(#fff, #999);
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    @include borders(#7b7b7b, #fff);
+
+    background: #c0c0c0;
+    padding: 10px 12px;
+}
+
+.body {
+    margin-top: 16px;
+    display: grid;
+    grid-template-rows: repeat(16, 1fr);
+    grid-template-columns: repeat(16, 1fr);
+
+    @include borders(#7b7b7b, #fff);
+}
+
+.face {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 52px;
+    height: 52px;
+    line-height: 52px;
+    font-size: 30px;
+
+    @include borders(#fff, #7b7b7b);
+
+    cursor: pointer;
+}
