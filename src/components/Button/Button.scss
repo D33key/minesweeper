@@ -1,10 +1,54 @@
-@import '../../styles/index.scss';
+@import "../../styles/index.scss";
 
-.button{
+.button {
     width: 30px;
     height: 30px;
+    font-weight: 700;
+    font-size: 1.25rem;
 
     @include borders(#fff, #7b7b7b);
 
     cursor: pointer;
+
+    &:active {
+        @include borders(#7b7b7b, #fff);
+    }
+
+    &.visible {
+        border-color: #7b7b7b;
+        border-width: 1px;
+    }
+
+    span {
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 1rem;
+    }
+
+    &.color-1 {
+        color: blue;
+    }
+    &.color-2 {
+        color: green;
+    }
+    &.color-3 {
+        color: red;
+    }
+    &.color-4 {
+        color: purple;
+    }
+    &.color-5 {
+        color: maroon;
+    }
+    &.color-6 {
+        color: aqua;
+    }
+    &.color-7 {
+        color: inherit;
+    }
+    &.color-8 {
+        color: gray;
+    }
 }

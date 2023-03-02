@@ -34,9 +34,12 @@
     width: 52px;
     height: 52px;
     line-height: 52px;
-    font-size: 30px;
+    font-size: 30px;   
 
     @include borders(#fff, #7b7b7b);
+    &:active{
+        @include borders(#7b7b7b, #fff);
+    }
 
     cursor: pointer;
 }
