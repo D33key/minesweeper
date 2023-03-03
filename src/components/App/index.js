@@ -17,6 +17,8 @@ const App = () => {
     const [time, setTime] = React.useState(0);
     const [bombFlagged, setBombFlagged] = React.useState(MAX_BOMBS);
     const [isBegin, setIsBegin] = React.useState(false);
+    const [win, setWin] = React.useState(false);
+    const [gameOver, setGameOver] = React.useState(false);
 
     React.useEffect(() => {
         const handleMouseDown = () => {
@@ -47,22 +49,78 @@ const App = () => {
         }
     }, [isBegin]);
 
-    const handleCellClick = (row, col) => () => {
-        if (!isBegin) setIsBegin(true);
+    React.useEffect(() => {
+        if (gameOver) {
+            setFace(Face.dead);
+            setIsBegin(false);
+        }
+    }, [gameOver]);
 
-        const curCell = cells[row][col];
+    React.useEffect(() => {
+        if (win) {
+            setFace(Face.win);
+            setIsBegin(false);
+        }
+    }, [win]);
+
+    const handleCellClick = (row, col) => () => {
         let newCells = cells.slice();
+        if (!isBegin) {
+            let isBomb = newCells[row][col].value === -1;
+            while (isBomb) {
+                newCells = generateCells(MAX_ROWS, MAX_COLS, MAX_BOMBS);
+                if (newCells[row][col].value !== -1) {
+                    isBomb = false;
+                    break;
+                }
+            }
+
+            setIsBegin(true);
+        }
+        const curCell = newCells[row][col];
 
         if (curCell.state === 2 || curCell.state === 1) return;
 
         if (curCell.value === -1) {
+            setGameOver(true);
+            newCells[row][col].red = true;
+            newCells = showAllBomb();
+            setCells(newCells);
+            return;
         } else if (curCell.value === 0) {
             newCells = openMultiCells(newCells, row, col, MAX_ROWS, MAX_COLS);
-            setCells(newCells);
         } else {
             newCells[row][col].state = 1;
-            setCells(newCells);
         }
+
+        //No available spaces to click => win
+        let isOpenCells = false;
+        for (let row = 0; row < MAX_ROWS; row++) {
+            for (let col = 0; col < MAX_COLS; col++) {
+                const curCell = newCells[row][col];
+
+                if (curCell.value !== -1 && curCell.state === 0) {
+                    isOpenCells = true;
+                    break;
+                }
+            }
+        }
+
+        if (!isOpenCells) {
+            newCells = newCells.map((row) =>
+                row.map((cell) => {
+                    if (cell.value === -1) {
+                        return {
+                            ...cell,
+                            state: 2,
+                        };
+                    }
+                    return cell;
+                })
+            );
+            setWin(true);
+        }
+        setCells(newCells);
     };
 
     const onCellContext = (row, col) => (e) => {
@@ -86,12 +144,12 @@ const App = () => {
     };
 
     const onFaceClick = () => {
-        if (isBegin) {
-            setIsBegin(false);
-            setTime(0);
-            setCells(generateCells(MAX_ROWS, MAX_COLS, MAX_BOMBS));
-            setBombFlagged(MAX_BOMBS);
-        }
+        setIsBegin(false);
+        setTime(0);
+        setCells(generateCells(MAX_ROWS, MAX_COLS, MAX_BOMBS));
+        setGameOver(false);
+        setBombFlagged(MAX_BOMBS);
+        setWin(false);
     };
 
     const renderCells = () => {
@@ -102,6 +160,7 @@ const App = () => {
                         key={`${rowIndex}-${colIndex}`}
                         state={cell.state}
                         value={cell.value}
+                        red={cell.red}
                         row={rowIndex}
                         col={colIndex}
                         onClick={handleCellClick}
@@ -110,6 +169,22 @@ const App = () => {
                 );
             });
         });
+    };
+
+    const showAllBomb = () => {
+        const curCells = cells.slice();
+        return curCells.map((row) =>
+            row.map((cell) => {
+                if (cell.value === -1) {
+                    return {
+                        ...cell,
+                        state: 1,
+                    };
+                }
+
+                return cell;
+            })
+        );
     };
 
     return (

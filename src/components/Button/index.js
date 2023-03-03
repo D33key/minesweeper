@@ -29,7 +29,7 @@ const Button = (props) => {
         <button
             className={`button ${props.state === 1 ? "visible" : ""} color-${
                 props.value
-            }`}
+            } ${props.red ? 'red' : ''}`}
             onClick={props.onClick(props.row, props.col)}
             onContextMenu={props.onContext(props.row, props.col)}
         >

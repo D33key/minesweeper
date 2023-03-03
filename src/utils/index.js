@@ -54,6 +54,7 @@ export const generateCells = (maxRows, maxCols, maxBombs) => {
             cells[i].push({
                 value: cellValue[1],
                 state: cellState[0],
+                red: false,
             });
         }
     }
