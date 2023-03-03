@@ -16,6 +16,7 @@
 
 ## Структура проекта
 
+```
 src/
 |-- components/
 | |-- App.js
@@ -26,8 +27,8 @@ src/
 |-- utils/
 | |-- index.js
 |-- index.js
+```
 
 ## Играть
 
 Поиграть можно по этой ссылке - https://minesweeper-tau-green.vercel.app/
-
